@@ -15,11 +15,11 @@ function Clamper(options) {
 
 Clamper.prototype = {
 
-    el: null,
+    elem: null,
 
-    elStartPos: null,
+    elemStartPos: null,
 
-    elMaxPos: null,
+    elemMaxPos: null,
 
     limiter: null,
 
@@ -36,9 +36,9 @@ Clamper.prototype = {
     init: function(options) {
         var that = this;
 
-        that.elStartPos = that.getOffset(that.el);
+        that.elemStartPos = that.getOffset(that.elem);
         that.limiterPos = that.getOffset(that.limiter);
-        that.el.style.width = that.el.offsetWidth + 'px';
+        that.elem.style.width = that.elem.offsetWidth + 'px';
 
         that.__createEmulator();
 
@@ -49,11 +49,11 @@ Clamper.prototype = {
 
     process: function() {
         var that = this,
-            el = that.el,
-            elWidth,
-            elHeight,
-            elStartPos,
-            elMaxTopPos,
+            elem = that.elem,
+            elemWidth,
+            elemHeight,
+            elemStartPos,
+            elemMaxTopPos,
             limiter = that.limiter,
             limiterHeight,
             limiterPos,
@@ -61,17 +61,17 @@ Clamper.prototype = {
             scrollTop,
             state;
 
-        elWidth = el.offsetWidth;
-        elHeight = el.offsetHeight;
-        elStartPos = that.elStartPos;
-        elMaxTopPos = elStartPos.top;
+        elemWidth = elem.offsetWidth;
+        elemHeight = elem.offsetHeight;
+        elemStartPos = that.elemStartPos;
+        elemMaxTopPos = elemStartPos.top;
         limiterHeight = limiter.offsetHeight;
         limiterPos = that.limiterPos;
         elMaxBottomPos = limiterPos.top + limiterHeight;
         scrollTop = that.getScrollTop();
 
-        if (scrollTop > elMaxTopPos) {
-            if (scrollTop + elHeight > elMaxBottomPos) {
+        if (scrollTop > elemMaxTopPos) {
+            if (scrollTop + elemHeight > elMaxBottomPos) {
                 state = 'bottom';
             }
             else {
@@ -99,14 +99,14 @@ Clamper.prototype = {
 
     __createEmulator: function() {
         var that = this,
-            el = that.el,
+            el = that.elem,
             elNext = el.nextSibling,
             elParent = el.parentNode,
             emulator;
 
         emulator = document.createElement('div');
-        emulator.style.width = that.el.offsetWidth + 'px';
-        emulator.style.height = that.el.offsetHeight + 'px';
+        emulator.style.width = that.elem.offsetWidth + 'px';
+        emulator.style.height = that.elem.offsetHeight + 'px';
         emulator.style.display = 'none';
 
         if (elNext) {
@@ -120,22 +120,22 @@ Clamper.prototype = {
     setState: function(state) {
         var that = this,
             states = that.states,
-            $el = $(that.el);
+            $el = $(that.elem);
 
         switch (state) {
             case 'fixed':
                 $el.addClass(states.fixed)
-                    .removeClass(states.top +' '+ states.bottom);
+                    .removeClass(states.normal +' '+ states.bottom);
                 break;
 
             case 'bottom':
                 $el.addClass(states.bottom)
-                    .removeClass(states.top +' '+ states.fixed);
+                    .removeClass(states.normal +' '+ states.fixed);
                 break;
 
             case 'normal':
             default:
-                $el.addClass(states.top)
+                $el.addClass(states.normal)
                     .removeClass(states.fixed +' '+ states.bottom);
                 break;
         }
