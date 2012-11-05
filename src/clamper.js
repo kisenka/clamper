@@ -27,11 +27,12 @@ Clamper.prototype = {
 
     emulator: null,
 
-    states: {
-        all: 'clamp',
-        normal: 'clamp_normal',
-        fixed: 'clamp_fixed',
-        bottom: 'clamp_bottom'
+    cssClasses: {
+        elem: 'clamper',
+        emulator: 'clamper-emulator',
+        state_normal: 'state_normal',
+        state_fixed: 'state_fixed',
+        state_bottom: 'state_bottom'
     },
 
     init: function(options) {
@@ -48,19 +49,21 @@ Clamper.prototype = {
     },
 
     prepare: function() {
-        var that = this;
+        var that = this,
+            emulator;
 
         // needed for fixed state
         that.elem.style.width = that.elem.offsetWidth + 'px';
 
         // add an clamper CSS class name
-        $(that.elem).addClass(that.states.all);
+        $(that.elem).addClass(that.cssClasses.elem);
 
         // initial settings
         that.elemStartPos = that.getOffset(that.elem);
         that.limiterPos = that.getOffset(that.limiter);
 
-        that.__createEmulator();
+        emulator = that.__createEmulator();
+        that.emulator = emulator;
     },
 
     process: function() {
@@ -115,44 +118,60 @@ Clamper.prototype = {
 
     __createEmulator: function() {
         var that = this,
-            el = that.elem,
-            elNext = el.nextSibling,
-            elParent = el.parentNode,
+            elem = that.elem,
+            elemNext = elem.nextSibling,
+            elemParent = elem.parentNode,
             emulator;
 
         emulator = document.createElement('div');
+        emulator.className = that.cssClasses.emulator;
         emulator.style.width = that.elem.offsetWidth + 'px';
         emulator.style.height = that.elem.offsetHeight + 'px';
         emulator.style.display = 'none';
+        emulator.style.visibility = 'visible';
+        emulator.style.float = $(elem).css('float');
 
-        if (elNext) {
-            elParent.insertBefore(emulator, elNext);
+        if (elemNext) {
+            elemParent.insertBefore(emulator, elemNext);
         } else {
-            elParent.appendChild(emulator);
+            elemParent.appendChild(emulator);
         }
         return emulator;
     },
 
     setState: function(state) {
         var that = this,
-            states = that.states,
-            $el = $(that.elem);
+            cssClasss = that.cssClasses,
+            $el = $(that.elem),
+            $emulator = $(that.emulator);
 
         switch (state) {
             case 'fixed':
-                $el.addClass(states.fixed)
-                    .removeClass(states.normal +' '+ states.bottom);
+                $el.addClass(cssClasss.state_fixed)
+                    .removeClass(cssClasss.state_normal +' '+ cssClasss.state_bottom);
+
+                $emulator.addClass(cssClasss.state_fixed)
+                    .removeClass(cssClasss.state_normal +' '+ cssClasss.state_bottom)
+                    .show();
                 break;
 
             case 'bottom':
-                $el.addClass(states.bottom)
-                    .removeClass(states.normal +' '+ states.fixed);
+                $el.addClass(cssClasss.state_bottom)
+                    .removeClass(cssClasss.state_normal +' '+ cssClasss.state_fixed);
+
+                $emulator.addClass(cssClasss.state_bottom)
+                    .removeClass(cssClasss.state_normal +' '+ cssClasss.state_fixed)
+                    .show();
                 break;
 
             case 'normal':
             default:
-                $el.addClass(states.normal)
-                    .removeClass(states.fixed +' '+ states.bottom);
+                $el.addClass(cssClasss.state_normal)
+                    .removeClass(cssClasss.state_fixed +' '+ cssClasss.state_bottom);
+
+                $emulator.addClass(cssClasss.state_normal)
+                    .removeClass(cssClasss.state_fixed +' '+ cssClasss.state_bottom)
+                    .hide();
                 break;
         }
     }
