@@ -42,6 +42,8 @@ Clamper.prototype = {
 
         that.__createEmulator();
 
+        that.process();
+
         $(window).scroll(function() {
             that.process();
         });
