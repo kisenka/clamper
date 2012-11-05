@@ -5,9 +5,10 @@
 <title>Clamper simple example</title>
 <style type="text/css">
 /* Clamp styles */
-.menu {padding-top:20px; margin-top:-20px;}
-.menu.clamp_fixed {position:fixed; top:20px;}
-.menu.clamp_bottom {position:absolute; top:auto; bottom:0;}
+.clamp {padding-top:20px; margin-top:-20px;}
+.clamp_normal {position:static;}
+.clamp_fixed {position:fixed; top:20px;}
+.clamp_bottom {position:absolute; top:auto; bottom:0;}
 
 /* Example styles */
 body {
@@ -16,8 +17,9 @@ body {
 }
 
 
-.global-wrapper {position:relative; margin:50px 0;}
+.global-wrapper {position:relative; margin:50px 0 900px;}
 .menu {float:left; width:200px;}
+.menu ul {margin:0;}
 .content {float:right; width:550px;}
 
 .clr {clear:both;}
@@ -68,11 +70,6 @@ $(document).ready(function() {
     <div class="clr"></div>
 
 </div>
-<br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br>
 
 </body>
 </html>
