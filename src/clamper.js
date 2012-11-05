@@ -28,6 +28,7 @@ Clamper.prototype = {
     emulator: null,
 
     states: {
+        all: 'clamp',
         normal: 'clamp_normal',
         fixed: 'clamp_fixed',
         bottom: 'clamp_bottom'
@@ -36,17 +37,30 @@ Clamper.prototype = {
     init: function(options) {
         var that = this;
 
-        that.elemStartPos = that.getOffset(that.elem);
-        that.limiterPos = that.getOffset(that.limiter);
-        that.elem.style.width = that.elem.offsetWidth + 'px';
-
-        that.__createEmulator();
+        // preparing
+        that.prepare();
 
         that.process();
 
         $(window).scroll(function() {
             that.process();
         });
+    },
+
+    prepare: function() {
+        var that = this;
+
+        // needed for fixed state
+        that.elem.style.width = that.elem.offsetWidth + 'px';
+
+        // add an clamper CSS class name
+        $(that.elem).addClass(that.states.all);
+
+        // initial settings
+        that.elemStartPos = that.getOffset(that.elem);
+        that.limiterPos = that.getOffset(that.limiter);
+
+        that.__createEmulator();
     },
 
     process: function() {
