@@ -1,4 +1,4 @@
-function Fixer(options) {
+function Clamper(options) {
     var that = this,
         option;
 
@@ -13,7 +13,7 @@ function Fixer(options) {
     that.init(options);
 }
 
-Fixer.prototype = {
+Clamper.prototype = {
 
     el: null,
 
@@ -28,9 +28,9 @@ Fixer.prototype = {
     emulator: null,
 
     states: {
-        normal: 'fixer_normal',
-        fixed: 'fixer_fixed',
-        bottom: 'fixer_bottom'
+        normal: 'clamp_normal',
+        fixed: 'clamp_fixed',
+        bottom: 'clamp_bottom'
     },
 
     init: function(options) {
