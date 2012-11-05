@@ -1,3 +1,6 @@
+// TODO: optimize onscroll event
+// TODO: refresh method
+
 function Clamper(options) {
     var that = this,
         option;
@@ -35,11 +38,13 @@ Clamper.prototype = {
         state_bottom: 'state_bottom'
     },
 
+    currentState: null,
+
     init: function(options) {
         var that = this;
 
         // preparing
-        that.prepare();
+        that.__prepare();
 
         that.process();
 
@@ -48,7 +53,7 @@ Clamper.prototype = {
         });
     },
 
-    prepare: function() {
+    __prepare: function() {
         var that = this,
             emulator;
 
@@ -59,60 +64,18 @@ Clamper.prototype = {
         $(that.elem).addClass(that.cssClasses.elem);
 
         // initial settings
-        that.elemStartPos = that.getOffset(that.elem);
-        that.limiterPos = that.getOffset(that.limiter);
+        that.elemStartPos = that.__getOffset(that.elem);
+        that.limiterPos = that.__getOffset(that.limiter);
 
         emulator = that.__createEmulator();
         that.emulator = emulator;
     },
 
-    process: function() {
-        var that = this,
-            elem = that.elem,
-            elemWidth,
-            elemHeight,
-            elemStartPos,
-            elemMaxTopPos,
-            limiter = that.limiter,
-            limiterHeight,
-            limiterPos,
-            elMaxBottomPos,
-            scrollTop,
-            state;
-
-        elemWidth = elem.offsetWidth;
-        elemHeight = elem.offsetHeight;
-        elemStartPos = that.elemStartPos;
-        elemMaxTopPos = elemStartPos.top;
-        limiterHeight = limiter.offsetHeight;
-        limiterPos = that.limiterPos;
-        elMaxBottomPos = limiterPos.top + limiterHeight;
-        scrollTop = that.getScrollTop();
-
-        if (scrollTop > elemMaxTopPos) {
-            if (scrollTop + elemHeight > elMaxBottomPos) {
-                state = 'bottom';
-            }
-            else {
-                state = 'fixed';
-            }
-        }
-        else {
-            state = 'normal';
-        }
-
-        that.setState(state);
-    },
-
-    refresh: function() {
-        var that = this;
-    },
-
-    getScrollTop: function() {
+    __getScrollTop: function() {
         return $(window).scrollTop();
     },
 
-    getOffset: function(obj) {
+    __getOffset: function(obj) {
         return $(obj).offset();
     },
 
@@ -139,11 +102,60 @@ Clamper.prototype = {
         return emulator;
     },
 
+    process: function() {
+        var that = this,
+            elem = that.elem,
+            elemWidth,
+            elemHeight,
+            elemStartPos,
+            elemMaxTopPos,
+            limiter = that.limiter,
+            limiterHeight,
+            limiterPos,
+            elemMaxBottomPos,
+            scrollTop,
+            state;
+
+        elemWidth = elem.offsetWidth;
+        elemHeight = elem.offsetHeight;
+        elemStartPos = that.elemStartPos;
+        elemMaxTopPos = elemStartPos.top;
+        limiterHeight = limiter.offsetHeight;
+        limiterPos = that.limiterPos;
+        elemMaxBottomPos = limiterPos.top + limiterHeight;
+        scrollTop = that.__getScrollTop();
+
+        if (scrollTop > elemMaxTopPos) {
+            if (scrollTop + elemHeight > elemMaxBottomPos) {
+                state = 'bottom';
+            }
+            else {
+                state = 'fixed';
+            }
+        }
+        else {
+            state = 'normal';
+        }
+
+        that.setState(state);
+    },
+
+    refresh: function() {
+        var that = this;
+    },
+
     setState: function(state) {
         var that = this,
-            cssClasss = that.cssClasses,
-            $el = $(that.elem),
-            $emulator = $(that.emulator);
+            cssClasss,
+            $el, $emulator;
+
+        if (that.currentState == state) {
+            return false;
+        }
+
+        cssClasss = that.cssClasses;
+        $el = $(that.elem);
+        $emulator = $(that.emulator);
 
         switch (state) {
             case 'fixed':
@@ -174,5 +186,7 @@ Clamper.prototype = {
                     .hide();
                 break;
         }
+
+        that.currentState = state;
     }
 };
