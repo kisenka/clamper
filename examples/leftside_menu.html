@@ -2,20 +2,19 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Clamper simple example</title>
+<title>Clamper leftside menu example</title>
 <style type="text/css">
 /* Clamp styles */
-.clamp {padding-top:20px; margin-top:-20px;}
-.clamp_normal {position:static;}
-.clamp_fixed {position:fixed; top:20px;}
-.clamp_bottom {position:absolute; top:auto; bottom:0;}
+.clamper {padding-top:20px; margin-top:-20px;}
+.clamper.state_normal {position:static;}
+.clamper.state_fixed {position:fixed; top:20px;}
+.clamper.state_bottom {position:absolute; top:auto; bottom:0;}
 
 /* Example styles */
 body {
     width:800px;
     margin:0 auto;
 }
-
 
 .global-wrapper {position:relative; margin:50px 0 900px;}
 .menu {float:left; width:200px;}
@@ -40,7 +39,7 @@ $(document).ready(function() {
 
 <div class="global-wrapper" id="global-wrapper">
 
-    <h1>Clamper simple example</h1>
+    <h1>Clamper leftside menu example</h1>
 
     <div class="menu" id="el">
         <ul>
