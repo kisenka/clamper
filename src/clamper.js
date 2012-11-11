@@ -24,9 +24,9 @@ Clamper.prototype = {
 
     elemMaxPos: null,
 
-    limiter: null,
+    scope: null,
 
-    limiterPos: null,
+    scopePos: null,
 
     emulator: null,
 
@@ -65,7 +65,7 @@ Clamper.prototype = {
 
         // initial settings
         that.elemStartPos = that.__getOffset(that.elem);
-        that.limiterPos = that.__getOffset(that.limiter);
+        that.scopePos = that.__getOffset(that.scope);
 
         emulator = that.__createEmulator();
         that.emulator = emulator;
@@ -109,7 +109,7 @@ Clamper.prototype = {
             elemHeight,
             elemStartPos,
             elemMaxTopPos,
-            limiter = that.limiter,
+            limiter = that.scope,
             limiterHeight,
             limiterPos,
             elemMaxBottomPos,
@@ -121,7 +121,7 @@ Clamper.prototype = {
         elemStartPos = that.elemStartPos;
         elemMaxTopPos = elemStartPos.top;
         limiterHeight = limiter.offsetHeight;
-        limiterPos = that.limiterPos;
+        limiterPos = that.scopePos;
         elemMaxBottomPos = limiterPos.top + limiterHeight;
         scrollTop = that.__getScrollTop();
 
